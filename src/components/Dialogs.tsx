@@ -88,7 +88,7 @@ function ConfirmView({ req }: { req: Extract<Request, { kind: "confirm" }> }) {
         </>
       }
     >
-      <p className="selectable whitespace-pre-wrap text-[13px] leading-relaxed text-muted">{req.message}</p>
+      <p className="selectable whitespace-pre-wrap break-words text-[13px] leading-relaxed text-muted">{req.message}</p>
     </Modal>
   );
 }

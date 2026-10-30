@@ -2,6 +2,7 @@ import { getCurrentWebview } from "@tauri-apps/api/webview";
 import clsx from "clsx";
 import { CheckCircle2, File, Folder, X, XCircle } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { confirmDialog } from "../components/Dialogs";
 import { api, toApiError } from "../lib/api";
 import { registerDropHandler, targetAt, useDrag, type DragPayload, type DropTarget, type Side } from "../lib/drag";
 import { formatSize } from "../lib/format";
@@ -29,6 +30,13 @@ export function SftpView() {
         const dest = panesRef.current[target.side];
         if (!dest.source) return;
         if (target.side === drag.side) {
+          const what = drag.paths.length === 1 ? `“${drag.names[0]}”` : `${drag.paths.length} items`;
+          const ok = await confirmDialog({
+            title: "Move items?",
+            message: `Move ${what} to:\n${target.dir}`,
+            confirmLabel: "Move",
+          });
+          if (!ok) return;
           try {
             await api.fsMove(drag.source, drag.paths, target.dir);
           } catch (e) {

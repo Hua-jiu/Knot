@@ -25,6 +25,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, 
 import { confirmDialog, promptDialog } from "../components/Dialogs";
 import { HostPicker, type PickResult } from "../components/HostPicker";
 import { OsIcon } from "../components/OsIcon";
+import { PathBreadcrumbs } from "../components/PathBreadcrumbs";
 import { PreviewModal } from "../components/PreviewModal";
 import { Button, Context, IconButton, Menu, Spinner } from "../components/ui";
 import { api, toApiError } from "../lib/api";
@@ -659,32 +660,8 @@ export function FilePane({
             >
               <ChevronRight size={18} />
             </IconButton>
-            <div className="ml-1 flex min-w-0 flex-1 items-center overflow-x-auto [scrollbar-width:none]">
-              {listing?.segments.map((s, i) => {
-                const last = i === listing.segments.length - 1;
-                const isDrop = dragOver?.side === side && dragOver.rowPath === `crumb:${s.path}`;
-                return (
-                  <div key={s.path} className="flex shrink-0 items-center">
-                    {i > 0 && <ChevronRight size={14} className="mx-0.5 text-faint" />}
-                    <button
-                      data-drop-dir={s.path}
-                      data-drop-row={`crumb:${s.path}`}
-                      data-side={side}
-                      onClick={() => !last && navigate(s.path)}
-                      className={clsx(
-                        "flex h-7 items-center gap-1.5 rounded-md px-1.5 text-[13.5px]",
-                        last ? "text-fg" : "text-muted hover:bg-hover hover:text-fg",
-                        isDrop && "bg-accent/30 text-fg",
-                      )}
-                    >
-                      <Folder size={16} className="fill-folder text-folder" />
-                      {s.name}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-            {loading && <Spinner className="mr-2 h-3.5 w-3.5 text-faint" />}
+            <PathBreadcrumbs segments={listing?.segments ?? []} side={side} onNavigate={(path) => void navigate(path)} />
+            {loading && <Spinner className="mr-2 h-3.5 w-3.5 shrink-0 text-faint" />}
           </div>
 
           {/* Column headers */}
