@@ -1,0 +1,14 @@
+# Dependencies & build output
+node_modules/
+dist/
+target/
+src-tauri/gen/
+*.tsbuildinfo
+
+# Local tooling artifacts
+.playwright-cli/
+output/
+.DS_Store
+
+# Icon design sources (the app uses src-tauri/icons/)
+tauri-icon/
